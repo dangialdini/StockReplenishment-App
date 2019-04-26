@@ -1,0 +1,603 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="StockReplenishmentModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ErplyTemp">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="255" />
+          <Property Name="ErplyStoreId" Type="int" />
+          <Property Name="ErplyStoreName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Qty" Type="int" />
+          <Property Name="SaleDate" Type="date" />
+        </EntityType>
+        <EntityType Name="FileTransferQueue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LogDateTime" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="TransType" Type="int" />
+          <Property Name="StoreId" Type="int" />
+          <Property Name="ProductId" Type="int" />
+          <Property Name="Message" Type="nvarchar" MaxLength="1024" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="ProductCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="PackSize" Type="int" Nullable="false" />
+          <Property Name="Mpl" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductRange">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="RangeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductsSold">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StoreId" Type="int" Nullable="false" />
+          <Property Name="UnixDateStamp" Type="int" Nullable="false" />
+          <Property Name="ProductCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="255" />
+          <Property Name="Minimum" Type="int" />
+          <Property Name="Qty" Type="int" Nullable="false" />
+          <Property Name="DFO" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Range">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Settings">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LastErplyOrderExtractTime" Type="datetimeoffset" Precision="7" />
+          <Property Name="LastOrderCreationTime" Type="datetimeoffset" Precision="7" />
+          <Property Name="NextOrderNo" Type="int" />
+          <Property Name="LastErplyOrderExtractTimeUnix" Type="int" />
+          <Property Name="LastOrderCreationTimeUnix" Type="int" />
+        </EntityType>
+        <EntityType Name="Store">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="255" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="255" />
+          <Property Name="Suburb" Type="nvarchar" MaxLength="255" />
+          <Property Name="State" Type="nvarchar" MaxLength="255" />
+          <Property Name="Postcode" Type="nvarchar" MaxLength="12" />
+          <Property Name="Country" Type="nvarchar" MaxLength="255" />
+          <Property Name="ForecastFactor" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Priority" Type="int" />
+          <Property Name="RangeId" Type="int" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="StoreStock">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StoreId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="StockOnHand" Type="int" Nullable="false" />
+          <Property Name="StockinTransit" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ProductRange_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="ProductRange" Type="Self.ProductRange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductRange">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductRange_Range">
+          <End Role="Range" Type="Self.Range" Multiplicity="1" />
+          <End Role="ProductRange" Type="Self.ProductRange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Range">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductRange">
+              <PropertyRef Name="RangeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductsSold_Store">
+          <End Role="Store" Type="Self.Store" Multiplicity="1" />
+          <End Role="ProductsSold" Type="Self.ProductsSold" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Store">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductsSold">
+              <PropertyRef Name="StoreId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Store_Range">
+          <End Role="Range" Type="Self.Range" Multiplicity="0..1" />
+          <End Role="Store" Type="Self.Store" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Range">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Store">
+              <PropertyRef Name="RangeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StoreStock_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="StoreStock" Type="Self.StoreStock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StoreStock">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StoreStock_Store">
+          <End Role="Store" Type="Self.Store" Multiplicity="1" />
+          <End Role="StoreStock" Type="Self.StoreStock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Store">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StoreStock">
+              <PropertyRef Name="StoreId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="StockReplenishmentModelStoreContainer">
+          <EntitySet Name="ErplyTemp" EntityType="Self.ErplyTemp" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FileTransferQueue" EntityType="Self.FileTransferQueue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductRange" EntityType="Self.ProductRange" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductsSold" EntityType="Self.ProductsSold" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Range" EntityType="Self.Range" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Settings" EntityType="Self.Settings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Store" EntityType="Self.Store" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StoreStock" EntityType="Self.StoreStock" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ProductRange_Product" Association="Self.FK_ProductRange_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="ProductRange" EntitySet="ProductRange" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductRange_Range" Association="Self.FK_ProductRange_Range">
+            <End Role="Range" EntitySet="Range" />
+            <End Role="ProductRange" EntitySet="ProductRange" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductsSold_Store" Association="Self.FK_ProductsSold_Store">
+            <End Role="Store" EntitySet="Store" />
+            <End Role="ProductsSold" EntitySet="ProductsSold" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Store_Range" Association="Self.FK_Store_Range">
+            <End Role="Range" EntitySet="Range" />
+            <End Role="Store" EntitySet="Store" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StoreStock_Product" Association="Self.FK_StoreStock_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="StoreStock" EntitySet="StoreStock" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StoreStock_Store" Association="Self.FK_StoreStock_Store">
+            <End Role="Store" EntitySet="Store" />
+            <End Role="StoreStock" EntitySet="StoreStock" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="StockReplenishmentModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="StockReplenishmentEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ErplyTemps" EntityType="StockReplenishmentModel.ErplyTemp" />
+          <EntitySet Name="FileTransferQueues" EntityType="StockReplenishmentModel.FileTransferQueue" />
+          <EntitySet Name="Products" EntityType="StockReplenishmentModel.Product" />
+          <EntitySet Name="ProductRanges" EntityType="StockReplenishmentModel.ProductRange" />
+          <EntitySet Name="ProductsSolds" EntityType="StockReplenishmentModel.ProductsSold" />
+          <AssociationSet Name="FK_ProductRange_Product" Association="StockReplenishmentModel.FK_ProductRange_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="ProductRange" EntitySet="ProductRanges" />
+          </AssociationSet>
+          <EntitySet Name="Stores" EntityType="StockReplenishmentModel.Store" />
+          <AssociationSet Name="FK_ProductsSold_Store" Association="StockReplenishmentModel.FK_ProductsSold_Store">
+            <End Role="Store" EntitySet="Stores" />
+            <End Role="ProductsSold" EntitySet="ProductsSolds" />
+          </AssociationSet>
+          <EntitySet Name="StoreStocks" EntityType="StockReplenishmentModel.StoreStock" />
+          <AssociationSet Name="FK_StoreStock_Product" Association="StockReplenishmentModel.FK_StoreStock_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="StoreStock" EntitySet="StoreStocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StoreStock_Store" Association="StockReplenishmentModel.FK_StoreStock_Store">
+            <End Role="Store" EntitySet="Stores" />
+            <End Role="StoreStock" EntitySet="StoreStocks" />
+          </AssociationSet>
+          <EntitySet Name="Settings" EntityType="StockReplenishmentModel.Setting" />
+          <EntitySet Name="Ranges" EntityType="StockReplenishmentModel.Range" />
+          <AssociationSet Name="FK_ProductRange_Range" Association="StockReplenishmentModel.FK_ProductRange_Range">
+            <End Role="Range" EntitySet="Ranges" />
+            <End Role="ProductRange" EntitySet="ProductRanges" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Store_Range" Association="StockReplenishmentModel.FK_Store_Range">
+            <End Role="Range" EntitySet="Ranges" />
+            <End Role="Store" EntitySet="Stores" />
+          </AssociationSet>
+          <EntitySet Name="Logs" EntityType="StockReplenishmentModel.Log" />
+          </EntityContainer>
+        <EntityType Name="ErplyTemp">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ErplyStoreId" Type="Int32" />
+          <Property Name="ErplyStoreName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Qty" Type="Int32" />
+          <Property Name="SaleDate" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="FileTransferQueue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreatedDateTime" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="FileName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="ProductCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PackSize" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ProductRanges" Relationship="StockReplenishmentModel.FK_ProductRange_Product" FromRole="Product" ToRole="ProductRange" />
+          <NavigationProperty Name="StoreStocks" Relationship="StockReplenishmentModel.FK_StoreStock_Product" FromRole="Product" ToRole="StoreStock" />
+          <Property Name="Mpl" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductRange">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="RangeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="StockReplenishmentModel.FK_ProductRange_Product" FromRole="ProductRange" ToRole="Product" />
+          <NavigationProperty Name="Range" Relationship="StockReplenishmentModel.FK_ProductRange_Range" FromRole="ProductRange" ToRole="Range" />
+        </EntityType>
+        <EntityType Name="ProductsSold">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StoreId" Type="Int32" Nullable="false" />
+          <Property Name="UnixDateStamp" Type="Int32" Nullable="false" />
+          <Property Name="ProductCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Minimum" Type="Int32" />
+          <Property Name="Qty" Type="Int32" Nullable="false" />
+          <Property Name="DFO" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Store" Relationship="StockReplenishmentModel.FK_ProductsSold_Store" FromRole="ProductsSold" ToRole="Store" />
+        </EntityType>
+        <Association Name="FK_ProductRange_Product">
+          <End Type="StockReplenishmentModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="StockReplenishmentModel.ProductRange" Role="ProductRange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductRange">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Store">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Address1" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Address2" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Suburb" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Postcode" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ForecastFactor" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Priority" Type="Int32" />
+          <Property Name="RangeId" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <NavigationProperty Name="ProductsSolds" Relationship="StockReplenishmentModel.FK_ProductsSold_Store" FromRole="Store" ToRole="ProductsSold" />
+          <NavigationProperty Name="StoreStocks" Relationship="StockReplenishmentModel.FK_StoreStock_Store" FromRole="Store" ToRole="StoreStock" />
+          <NavigationProperty Name="Range" Relationship="StockReplenishmentModel.FK_Store_Range" FromRole="Store" ToRole="Range" />
+        </EntityType>
+        <Association Name="FK_ProductsSold_Store">
+          <End Type="StockReplenishmentModel.Store" Role="Store" Multiplicity="1" />
+          <End Type="StockReplenishmentModel.ProductsSold" Role="ProductsSold" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Store">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductsSold">
+              <PropertyRef Name="StoreId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="StoreStock">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StoreId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="StockOnHand" Type="Int32" Nullable="false" />
+          <Property Name="StockinTransit" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="StockReplenishmentModel.FK_StoreStock_Product" FromRole="StoreStock" ToRole="Product" />
+          <NavigationProperty Name="Store" Relationship="StockReplenishmentModel.FK_StoreStock_Store" FromRole="StoreStock" ToRole="Store" />
+        </EntityType>
+        <Association Name="FK_StoreStock_Product">
+          <End Type="StockReplenishmentModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="StockReplenishmentModel.StoreStock" Role="StoreStock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StoreStock">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StoreStock_Store">
+          <End Type="StockReplenishmentModel.Store" Role="Store" Multiplicity="1" />
+          <End Type="StockReplenishmentModel.StoreStock" Role="StoreStock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Store">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StoreStock">
+              <PropertyRef Name="StoreId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Setting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LastErplyOrderExtractTime" Type="DateTimeOffset" Precision="7" />
+          <Property Name="LastOrderCreationTime" Type="DateTimeOffset" Precision="7" />
+          <Property Name="NextOrderNo" Type="Int32" />
+          <Property Name="LastErplyOrderExtractTimeUnix" Type="Int32" />
+          <Property Name="LastOrderCreationTimeUnix" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Range">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ProductRanges" Relationship="StockReplenishmentModel.FK_ProductRange_Range" FromRole="Range" ToRole="ProductRange" />
+          <NavigationProperty Name="Stores" Relationship="StockReplenishmentModel.FK_Store_Range" FromRole="Range" ToRole="Store" />
+        </EntityType>
+        <Association Name="FK_ProductRange_Range">
+          <End Type="StockReplenishmentModel.Range" Role="Range" Multiplicity="1" />
+          <End Type="StockReplenishmentModel.ProductRange" Role="ProductRange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Range">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductRange">
+              <PropertyRef Name="RangeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Store_Range">
+          <End Type="StockReplenishmentModel.Range" Role="Range" Multiplicity="0..1" />
+          <End Type="StockReplenishmentModel.Store" Role="Store" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Range">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Store">
+              <PropertyRef Name="RangeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LogDateTime" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="TransType" Type="Int32" />
+          <Property Name="StoreId" Type="Int32" />
+          <Property Name="ProductId" Type="Int32" />
+          <Property Name="Message" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="StockReplenishmentModelStoreContainer" CdmEntityContainer="StockReplenishmentEntities">
+          <EntitySetMapping Name="ErplyTemps">
+            <EntityTypeMapping TypeName="StockReplenishmentModel.ErplyTemp">
+              <MappingFragment StoreEntitySet="ErplyTemp">
+                <ScalarProperty Name="SaleDate" ColumnName="SaleDate" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="ErplyStoreName" ColumnName="ErplyStoreName" />
+                <ScalarProperty Name="ErplyStoreId" ColumnName="ErplyStoreId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FileTransferQueues">
+            <EntityTypeMapping TypeName="StockReplenishmentModel.FileTransferQueue">
+              <MappingFragment StoreEntitySet="FileTransferQueue">
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="StockReplenishmentModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="Mpl" ColumnName="Mpl" />
+                <ScalarProperty Name="PackSize" ColumnName="PackSize" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductRanges">
+            <EntityTypeMapping TypeName="StockReplenishmentModel.ProductRange">
+              <MappingFragment StoreEntitySet="ProductRange">
+                <ScalarProperty Name="RangeId" ColumnName="RangeId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductsSolds">
+            <EntityTypeMapping TypeName="StockReplenishmentModel.ProductsSold">
+              <MappingFragment StoreEntitySet="ProductsSold">
+                <ScalarProperty Name="DFO" ColumnName="DFO" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="Minimum" ColumnName="Minimum" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="UnixDateStamp" ColumnName="UnixDateStamp" />
+                <ScalarProperty Name="StoreId" ColumnName="StoreId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stores">
+            <EntityTypeMapping TypeName="StockReplenishmentModel.Store">
+              <MappingFragment StoreEntitySet="Store">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RangeId" ColumnName="RangeId" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="ForecastFactor" ColumnName="ForecastFactor" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Postcode" ColumnName="Postcode" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Suburb" ColumnName="Suburb" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StoreStocks">
+            <EntityTypeMapping TypeName="StockReplenishmentModel.StoreStock">
+              <MappingFragment StoreEntitySet="StoreStock">
+                <ScalarProperty Name="StockinTransit" ColumnName="StockinTransit" />
+                <ScalarProperty Name="StockOnHand" ColumnName="StockOnHand" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="StoreId" ColumnName="StoreId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Settings">
+            <EntityTypeMapping TypeName="StockReplenishmentModel.Setting">
+              <MappingFragment StoreEntitySet="Settings">
+                <ScalarProperty Name="LastOrderCreationTimeUnix" ColumnName="LastOrderCreationTimeUnix" />
+                <ScalarProperty Name="LastErplyOrderExtractTimeUnix" ColumnName="LastErplyOrderExtractTimeUnix" />
+                <ScalarProperty Name="NextOrderNo" ColumnName="NextOrderNo" />
+                <ScalarProperty Name="LastOrderCreationTime" ColumnName="LastOrderCreationTime" />
+                <ScalarProperty Name="LastErplyOrderExtractTime" ColumnName="LastErplyOrderExtractTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ranges">
+            <EntityTypeMapping TypeName="StockReplenishmentModel.Range">
+              <MappingFragment StoreEntitySet="Range">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Logs">
+            <EntityTypeMapping TypeName="StockReplenishmentModel.Log">
+              <MappingFragment StoreEntitySet="Log">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="StoreId" ColumnName="StoreId" />
+                <ScalarProperty Name="TransType" ColumnName="TransType" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="LogDateTime" ColumnName="LogDateTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

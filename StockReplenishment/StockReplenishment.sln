@@ -1,0 +1,119 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockReplenishment.Service", "StockReplenishment.Service\StockReplenishment.Service.csproj", "{46C29EB8-5ED5-4AB3-ADC0-6D2972113415}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockReplenishment.Models", "StockReplenishment.Models\StockReplenishment.Models.csproj", "{A5722253-75B8-4E60-9049-97A7CF4A42E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockReplenishment.RopesDAL", "StockReplenishment.RopesDAL\StockReplenishment.RopesDAL.csproj", "{FF582DD4-2E81-4081-8579-DD7A60D06F09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockReplenishment.SqlDAL", "StockReplenishment.SqlDAL\StockReplenishment.SqlDAL.csproj", "{B9DEAEBC-71B3-44C6-A92F-5B7C3E98AAAA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StockReplenishment.Services", "StockReplenishment.Services", "{021B412E-A3EC-4859-88F1-9C56EABCFC32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockReplenishment.Enumerations", "StockReplenishment.Enumerations\StockReplenishment.Enumerations.csproj", "{9DCBEC8B-8969-4E05-9771-C318A4BAB6E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockReplenishment.ErplyService", "StockReplenishment.Services\StockReplenishment.ErplyService\StockReplenishment.ErplyService.csproj", "{A57085FA-635C-48DD-BCBB-630EE9E5B2CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockReplenishment.CommonService", "StockReplenishment.Services\StockReplenishment.CommonService\StockReplenishment.CommonService.csproj", "{D6ADDD9D-3077-4351-865F-0F2FD2E94C89}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StockReplenishment.Installation", "StockReplenishment.Installation", "{DDAA779E-45D7-4180-830C-9AB5D6D8C269}"
+	ProjectSection(SolutionItems) = preProject
+		StockReplenishment.Installation\AR - Product Ranges.xlsx = StockReplenishment.Installation\AR - Product Ranges.xlsx
+		StockReplenishment.Installation\ConfigureProducts.sql = StockReplenishment.Installation\ConfigureProducts.sql
+		StockReplenishment.Installation\CreateDatabase.sql = StockReplenishment.Installation\CreateDatabase.sql
+		StockReplenishment.Installation\Permissions.sql = StockReplenishment.Installation\Permissions.sql
+		StockReplenishment.Installation\PrepareLogs.sql = StockReplenishment.Installation\PrepareLogs.sql
+		StockReplenishment.Installation\Ranges.sql = StockReplenishment.Installation\Ranges.sql
+		StockReplenishment.Installation\Stores.sql = StockReplenishment.Installation\Stores.sql
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockReplenishment.SalesOrderService", "StockReplenishment.Services\StockReplenishment.SalesOrderService\StockReplenishment.SalesOrderService.csproj", "{4C713F7F-9CEE-4BE1-BA42-AA1E71A531F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockReplenishment.StoreService", "StockReplenishment.Services\StockReplenishment.StoreService\StockReplenishment.StoreService.csproj", "{20FD8052-7286-4CDD-8F0C-5C617405ABE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockReplenishment.LogService", "StockReplenishment.Services\StockReplenishment.LogService\StockReplenishment.LogService.csproj", "{7A9B8ED2-1464-4298-9ED4-DD76E05FAF64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockReplenishment.UI", "StockReplenishment.UI\StockReplenishment.UI.csproj", "{89325D7B-523A-4B5A-86D3-A262465EFC9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockReplenishment.ReplenishmentCalculatorService", "StockReplenishment.Services\StockReplenishment.ReplenishmentCalculatorService\StockReplenishment.ReplenishmentCalculatorService.csproj", "{6A0B1B99-78FB-43E3-A75C-CAF4D31B5583}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockReplenishment.ProductService", "StockReplenishment.Services\StockReplenishment.ProductService\StockReplenishment.ProductService.csproj", "{B1E3B834-FE2A-45CD-9BC9-B46DFA34A9EE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{46C29EB8-5ED5-4AB3-ADC0-6D2972113415}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46C29EB8-5ED5-4AB3-ADC0-6D2972113415}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46C29EB8-5ED5-4AB3-ADC0-6D2972113415}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46C29EB8-5ED5-4AB3-ADC0-6D2972113415}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5722253-75B8-4E60-9049-97A7CF4A42E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5722253-75B8-4E60-9049-97A7CF4A42E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5722253-75B8-4E60-9049-97A7CF4A42E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5722253-75B8-4E60-9049-97A7CF4A42E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF582DD4-2E81-4081-8579-DD7A60D06F09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF582DD4-2E81-4081-8579-DD7A60D06F09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF582DD4-2E81-4081-8579-DD7A60D06F09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF582DD4-2E81-4081-8579-DD7A60D06F09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9DEAEBC-71B3-44C6-A92F-5B7C3E98AAAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9DEAEBC-71B3-44C6-A92F-5B7C3E98AAAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9DEAEBC-71B3-44C6-A92F-5B7C3E98AAAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9DEAEBC-71B3-44C6-A92F-5B7C3E98AAAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DCBEC8B-8969-4E05-9771-C318A4BAB6E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DCBEC8B-8969-4E05-9771-C318A4BAB6E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DCBEC8B-8969-4E05-9771-C318A4BAB6E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DCBEC8B-8969-4E05-9771-C318A4BAB6E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A57085FA-635C-48DD-BCBB-630EE9E5B2CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A57085FA-635C-48DD-BCBB-630EE9E5B2CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A57085FA-635C-48DD-BCBB-630EE9E5B2CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A57085FA-635C-48DD-BCBB-630EE9E5B2CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6ADDD9D-3077-4351-865F-0F2FD2E94C89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6ADDD9D-3077-4351-865F-0F2FD2E94C89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6ADDD9D-3077-4351-865F-0F2FD2E94C89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6ADDD9D-3077-4351-865F-0F2FD2E94C89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C713F7F-9CEE-4BE1-BA42-AA1E71A531F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C713F7F-9CEE-4BE1-BA42-AA1E71A531F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C713F7F-9CEE-4BE1-BA42-AA1E71A531F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C713F7F-9CEE-4BE1-BA42-AA1E71A531F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20FD8052-7286-4CDD-8F0C-5C617405ABE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20FD8052-7286-4CDD-8F0C-5C617405ABE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20FD8052-7286-4CDD-8F0C-5C617405ABE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20FD8052-7286-4CDD-8F0C-5C617405ABE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A9B8ED2-1464-4298-9ED4-DD76E05FAF64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A9B8ED2-1464-4298-9ED4-DD76E05FAF64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A9B8ED2-1464-4298-9ED4-DD76E05FAF64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A9B8ED2-1464-4298-9ED4-DD76E05FAF64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89325D7B-523A-4B5A-86D3-A262465EFC9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89325D7B-523A-4B5A-86D3-A262465EFC9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89325D7B-523A-4B5A-86D3-A262465EFC9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89325D7B-523A-4B5A-86D3-A262465EFC9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A0B1B99-78FB-43E3-A75C-CAF4D31B5583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A0B1B99-78FB-43E3-A75C-CAF4D31B5583}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A0B1B99-78FB-43E3-A75C-CAF4D31B5583}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A0B1B99-78FB-43E3-A75C-CAF4D31B5583}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1E3B834-FE2A-45CD-9BC9-B46DFA34A9EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1E3B834-FE2A-45CD-9BC9-B46DFA34A9EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1E3B834-FE2A-45CD-9BC9-B46DFA34A9EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1E3B834-FE2A-45CD-9BC9-B46DFA34A9EE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A57085FA-635C-48DD-BCBB-630EE9E5B2CC} = {021B412E-A3EC-4859-88F1-9C56EABCFC32}
+		{D6ADDD9D-3077-4351-865F-0F2FD2E94C89} = {021B412E-A3EC-4859-88F1-9C56EABCFC32}
+		{4C713F7F-9CEE-4BE1-BA42-AA1E71A531F5} = {021B412E-A3EC-4859-88F1-9C56EABCFC32}
+		{20FD8052-7286-4CDD-8F0C-5C617405ABE8} = {021B412E-A3EC-4859-88F1-9C56EABCFC32}
+		{7A9B8ED2-1464-4298-9ED4-DD76E05FAF64} = {021B412E-A3EC-4859-88F1-9C56EABCFC32}
+		{6A0B1B99-78FB-43E3-A75C-CAF4D31B5583} = {021B412E-A3EC-4859-88F1-9C56EABCFC32}
+		{B1E3B834-FE2A-45CD-9BC9-B46DFA34A9EE} = {021B412E-A3EC-4859-88F1-9C56EABCFC32}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1314CF85-2D58-4C56-9A1F-6FC4FE8962D7}
+	EndGlobalSection
+EndGlobal

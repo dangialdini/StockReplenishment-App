@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e7d59fd34e0e4fd1929a62cada9296dc" Name="Diagram1">
+        <EntityTypeShape EntityType="StockReplenishmentModel.ErplyTemp" Width="1.5" PointX="6.5" PointY="0.75" />
+        <EntityTypeShape EntityType="StockReplenishmentModel.FileTransferQueue" Width="1.5" PointX="8.375" PointY="0.75" />
+        <EntityTypeShape EntityType="StockReplenishmentModel.Product" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="StockReplenishmentModel.ProductRange" Width="1.5" PointX="3.75" PointY="2.75" />
+        <EntityTypeShape EntityType="StockReplenishmentModel.ProductsSold" Width="1.5" PointX="6.5" PointY="5.875" />
+        <EntityTypeShape EntityType="StockReplenishmentModel.Store" Width="1.5" PointX="3.75" PointY="5.5" />
+        <AssociationConnector Association="StockReplenishmentModel.FK_ProductRange_Product" />
+        <AssociationConnector Association="StockReplenishmentModel.FK_ProductsSold_Store" />
+        <EntityTypeShape EntityType="StockReplenishmentModel.StoreStock" Width="1.5" PointX="0.75" PointY="7.625" />
+        <AssociationConnector Association="StockReplenishmentModel.FK_StoreStock_Product" />
+        <AssociationConnector Association="StockReplenishmentModel.FK_StoreStock_Store" />
+        <EntityTypeShape EntityType="StockReplenishmentModel.Setting" Width="1.5" PointX="6.5" PointY="3.5" />
+        <EntityTypeShape EntityType="StockReplenishmentModel.Range" Width="1.5" PointX="1.625" PointY="4.125" />
+        <AssociationConnector Association="StockReplenishmentModel.FK_ProductRange_Range" />
+        <AssociationConnector Association="StockReplenishmentModel.FK_Store_Range" />
+        <EntityTypeShape EntityType="StockReplenishmentModel.Log" Width="1.5" PointX="8.375" PointY="3.5" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

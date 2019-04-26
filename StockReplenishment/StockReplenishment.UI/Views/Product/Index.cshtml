@@ -1,0 +1,191 @@
+﻿<span id="toaster"></span>
+
+<script type="text/x-kendo-template" id="template">
+    <div style="display:inline-block;"><h3>Products</h3></div>
+    <div style="float:right;">
+        <button id="excelExport" class="k-button"><span class="k-icon k-i-excel" style="font-size:22px;"></span></button>
+        <button id="refreshProducts" class="k-button"><span class="k-icon k-i-refresh"></span></button>
+        <button id="saveChanges" class="k-button"><span class="k-icon k-i-save"></span></button>
+    </div>
+</script>
+<div id="products"></div>
+
+<script type="text/javascript">
+    $(function () {
+        $('.k-grid-toolbar').addClass('text-right');
+        var toaster = $("#toaster").kendoNotification({
+            button: true,
+            allowHideAfter: 30000,
+            autoHideAfter: 60000
+        }).data("kendoNotification");
+
+        $("#products").kendoGrid({
+            toolbar: [{ template: $('#template').html() }],
+            excel: {
+                allPages: true
+            },
+            dataSource: {
+                transport: {
+                    //read: {
+                    //    url: 'api/Products/GetProducts',
+                    //    //dataType: 'json',
+                    //    type: 'POST',
+                    //    contentType: 'application/json'
+                    //},
+                    read: {
+                        url: 'api/Products/GetProducts',
+                        dataType: 'json',
+                        type: 'GET'
+                    },
+                    update: {
+                        url: 'api/Products/UpdateProduct',
+                        dataType: 'json',
+                        type: 'POST'
+                    },
+                    parameterMap: function (options, operation) {
+                        //return kendo.stringify(options);
+                        return { products: kendo.stringify(options.models) };
+                    }
+                },
+                //serverPaging: true,
+                //serverFiltering: true,
+                //filter: { logic: "eq", filters: [{ field: "ProductCode" }] },
+                //serverSorting: true,
+                schema: {
+                    //data: 'Data',
+                    //total: 'total'
+                    model: {
+                        id: 'Id',
+                        fields: {
+                            Id: { editable: false, type: 'number' },
+                            ProductCode: { editable: false },
+                            ProductName: { editable: false },
+                            MSQ: { editable: false, type: 'number' },
+                            Mpl: { type: 'number' },
+                            ProductRanges: { editable: false, defaultValue: { Id: 0, ProductId: 0, RangeId: 0, IsMember: false } }
+                        }
+                    }
+                },
+                batch: true,
+                requestEnd: function (e) {
+                    if (e.type == "update") {
+                        if (!e.response.Errors) {
+                            e.sender.read()
+                        }
+                    }
+                },
+                pageSize: 35
+            },
+            filterable: true,
+            sortable: true,
+            resizable: true,
+            columns: [
+                { field: 'ProductCode', title: 'Code', width: '150px' },
+                { field: 'ProductName', title: 'Name', width: '100%' },
+                { field: 'MSQ', title: 'Pack Size', width: '120px', headerAttributes: { style: "text-align:center" }, attributes: { style: "text-align:center" }, },
+                { field: 'Mpl', title: 'MPL', width: '120px', headerAttributes: { style: "text-align:center" }, attributes: { style: "text-align:center" }, },
+                {
+                    field: 'ProductRanges',
+                    title: 'Product Ranges',
+                    width: '100%',
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" },
+                    template: function (dataItem) {
+                        var html = '<div style="display:inline-block;">';
+                        dataItem.ProductRanges.forEach(function (item, index, arr) {
+                            var checkboxId = item.ProductId + '_' + item.RangeId;
+                            var isMember = item.IsMember ? 'checked="checked"' : "";
+                            html += '<input id="' + item.uid + '" type="checkbox" class="k-checkbox chkbx"' + isMember + ' />';
+                            html += '<label class="k-checkbox-label" for="' + item.uid + '" style="margin-right:20px;padding-left:25px;font-weight:normal;">' + item.RangeName + '</label>';
+                        });
+                        html += '</div>';
+                        return html;
+                    }
+                }
+            ],
+            pageable: {
+                pageSizes: [10, 25, 35, 50, 100, "all"],
+                numeric: false
+            },
+            editable: true
+        });
+
+        // Set edit fields to 'dirty' AND update the row dataItem on change
+        $("#products .k-grid-content").on("change", "input.chkbx", function (e) {
+            var grid = $("#products").data("kendoGrid");
+            var dataItem = grid.dataItem($(e.target).closest("tr"));
+
+            for (var i = 0; i < dataItem.ProductRanges.length; i++) {
+                if (this.id == dataItem.ProductRanges[i].uid) {
+                    dataItem.ProductRanges[i].IsMember = this.checked;
+                }
+            }
+
+            $(e.target).closest("td").prepend("<span class='k-dirty'></span>");
+            dataItem.dirty = true;
+        });
+        $("#products .k-grid-content").on("change", ".numeric", function (e) {
+            var grid = $("#products").data("kendoGrid");
+            var dataItem = grid.dataItem($(e.target).closest("tr"));
+            $(e.target).closest("td").prepend("<span class='k-dirty'></span>");
+            dataItem[this.name] = this.value;
+            dataItem.dirty = true;
+        });
+
+
+        // SAVE CHANGES
+        $("#saveChanges").kendoButton({
+            click: function (e) {
+                var grid = $("#products").data("kendoGrid");
+                grid.saveChanges();
+            }
+        }).kendoTooltip({
+            position: 'bottom',
+            content: 'Save Changes'
+        });
+
+
+        // REFRESH PRODUCTS (from Erply)
+        $("#refreshProducts").kendoButton({
+            click: function (e) {
+
+                kendo.confirm("Are you sure you want to update the products list from Erply?")
+                    .then(function () {
+                        kendo.ui.progress($("body"), true)
+                        $.ajax({
+                            url: 'api/Products/RefreshProductsFromErply',
+                            type: 'POST'
+                        }).done(function (data, status, xhr) {
+                            var grid = $("#products").data("kendoGrid");
+                            grid.dataSource.read();
+                            grid.refresh();
+                            kendo.ui.progress($("body"), false)
+                            toaster.show("Products successfully updated from Erply", "info");
+                        }).fail(function (xhr, status, error) {
+                            kendo.ui.progress($("body"), false)
+                            if (error != null) {
+                                toaster.show(error, "error");
+                            } else {
+                                toaster.show("Error: Unable to update Stores from Erply", "error");
+                            }
+                        });
+                    });
+
+            }
+        }).kendoTooltip({
+            position: 'bottom',
+            content: 'Refresh Products List'
+        });
+
+        // EXPORT TO EXCEL
+        $("#excelExport").kendoButton({
+            click: function (e) {
+                var grid = $("#products").data("kendoGrid");
+                grid.saveAsExcel();
+            }
+        }).kendoTooltip({
+            position: 'bottom',
+            content: 'Export to Excel'
+        });        
+    });
+</script>

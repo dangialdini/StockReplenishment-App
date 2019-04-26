@@ -1,0 +1,121 @@
+﻿<style>
+    .k-grid-content .k-button-icontext .k-icon{
+        display:inline-block;
+    }
+    .k-grid tbody .k-button {
+        min-width: 0;
+        padding: 5px;
+    }
+</style>
+
+<script type="text/x-kendo-template" id="template">
+    <div style="display:inline-block;"><h3>Product Ranges</h3></div>
+    <div style="float:right;">
+        <button id="addRange" class="k-button"><span class="k-icon k-i-plus"></span></button>
+        <button id="saveChanges" class="k-button"><span class="k-icon k-i-save"></span></button>
+    </div>
+</script>
+<div id="ranges" style="max-width:500px;margin:0 auto;"></div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#ranges').kendoGrid({
+            toolbar: [{ template: $("#template").html() }],
+            editable: true,
+            dataSource: {
+                transport: {
+                    read: {
+                        url: 'api/Range/GetRanges',
+                        dataType: 'json',
+                        type: 'GET'
+                    },
+                    create: {
+                        url: 'api/Range/CreateRange',
+                        dataType: 'json',
+                        type: 'POST'
+                    },
+                    update: {
+                        url: 'api/Range/UpdateRange',
+                        dataType: 'json',
+                        type: 'POST'
+                    },
+                    destroy: {
+                        url: 'api/Range/DeleteRange',
+                        dataType: 'json',
+                        type: 'DELETE'
+                    },
+                    parameterMap: function (options, operation) {
+                        return { range: kendo.stringify(options.models) };
+                    }
+                },
+                schema: {
+                    model: {
+                        id: 'Id',
+                        fields: {
+                            Id: { editable: false, type: 'number' },
+                            Name: {},
+                            IsActive: { editable: false, type: 'boolean' } // 'editable: false' will disable the grid switch between the displayed checkbox and the grids editor checkbox - this requires manual setting of dirty/checked fields
+                        }
+                    }
+                },
+                batch: true,
+                requestEnd: function (e) {
+                    if (e.type == "update" || e.type == "create" || e.type == "destroy") {
+                        if (!e.response.Errors) {
+                            e.sender.read();
+                        }
+                    }
+                }
+            },
+            columns: [
+                { field: 'Name', title: 'Name' },
+                {
+                    field: 'IsActive', title: 'Is Active?', width: '80px',
+                    attributes: { style: "text-align:center" },
+                    template:
+                        '<input id="checkbox#=Id#" type="checkbox" class="k-checkbox chkbx" #= IsActive ? \'checked="checked"\' : "" # />' +
+                        '<label class="k-checkbox-label" for="checkbox#=Id#"</label>'
+                },
+                {
+                    command: [ { name: "destroy", iconClass: "k-icon k-i-delete", text: " " }], width: "60px"
+                }
+            ],
+            remove: function (e) {
+                var grid = $("#ranges").data("kendoGrid");
+                grid.dataSource.remove(e.model);
+                this.dataSource.sync();
+            }
+        });
+
+        // Set edit fields to 'dirty' on change
+        $("#ranges .k-grid-content").on("change", "input.chkbx", function (e) {
+            var grid = $("#ranges").data("kendoGrid");
+            var dataItem = grid.dataItem($(e.target).closest("tr"));
+            $(e.target).closest("td").prepend("<span class='k-dirty'></span>");
+            dataItem.IsActive = this.checked;
+            dataItem.dirty = true;
+        });
+
+
+        //**** TOOLBAR ****//
+        $("#addRange").kendoButton({
+            click: function (e) {
+                var grid = $("#ranges").data("kendoGrid");
+                grid.addRow();
+            }
+        }).kendoTooltip({
+            position: 'bottom',
+            content: 'Add a Range'
+        });
+        $("#saveChanges").kendoButton({
+            click: function (e) {
+                var grid = $("#ranges").data("kendoGrid");
+                grid.saveChanges();
+            }
+        }).kendoTooltip({
+            position: 'bottom',
+            content: 'Save Changes'
+        });
+
+    });
+</script>

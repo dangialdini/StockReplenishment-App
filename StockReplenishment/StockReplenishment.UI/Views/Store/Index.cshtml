@@ -1,0 +1,219 @@
+﻿<span id="toaster"></span>
+
+<script type="text/x-kendo-template" id="template">
+    <div style="display:inline-block;"><h3>Store Locations</h3></div>
+    <div style="float:right;">
+        <button id="excelExport" class="k-button"><span class="k-icon k-i-excel" style="font-size:22px;"></span></button>
+        <button id="refreshStores" class="k-button"><span class="k-icon k-i-refresh"></span></button>
+        <button id="saveChanges" class="k-button"><span class="k-icon k-i-save"></span></button>
+    </div>
+</script>
+<div id="stores"></div>
+
+<script type="text/javascript">
+    $(function () {
+        $('.k-grid-toolbar').addClass('text-right');
+        var toaster = $("#toaster").kendoNotification({
+            button: true,
+            allowHideAfter: 30000,
+            autoHideAfter: 60000
+        }).data("kendoNotification");
+
+        $("#stores").kendoGrid({
+            toolbar: [{ template: $("#template").html() }],
+            excel: {
+                allPages: true
+            },
+            dataSource: {
+                transport: {
+                    read: {
+                        url: 'api/Stores/GetStores',
+                        dataType: 'json',
+                        type: 'GET'
+                    },
+                    update: {
+                        url: 'api/Stores/UpdateStores',
+                        dataType: 'json',
+                        type: 'POST'
+                    },
+                    parameterMap: function (options, operation) {
+                        return { stores: kendo.stringify(options.models) };
+                    }
+                },
+                schema: {
+                    model: {
+                        id: 'Id',
+                        fields: {
+                            Id: { editable: false, type: 'number' },
+                            Name: { editable: false, },
+                            Address1: { editable: false, },
+                            Address2: { editable: false, },
+                            Suburb: { editable: false, },
+                            State: { editable: false, },
+                            Postcode: { editable: false, },
+                            Country: { editable: false, },
+                            Range: { defaultValue: { Id: 0, Name: '' } },
+                            ForecastFactor: { type: 'number', min: 0 },
+                            Priority: { type: 'number', min: 0 },
+                            IsActive: { editable: false, type: 'boolean' } // 'editable: false' will disable the grid switch between the displayed checkbox and the grids editor checkbox - this requires manual setting of dirty/checked fields
+                        }
+                    }
+                },
+                batch: true,
+                requestEnd: function (e) {
+                    if (e.type == "update") {
+                        if (!e.response.Errors) {
+                            e.sender.read();
+                        }
+                    }
+                }
+            },
+            filterable: true,
+            sortable: true,
+            resizable: true,
+            columns: [
+                //{ field: 'Id', title: 'Store Id', width: '80px' },
+                { field: 'Name', title: 'Name' },
+                { field: 'Address1', title: 'Address 1' },
+                { field: 'Address2', title: 'Address 2' },
+                { field: 'Suburb', title: 'Suburb', width: '150px' },
+                { field: 'State', title: 'State', width: '80px' },
+                { field: 'Postcode', title: 'Postcode', width: '110px' },
+                { field: 'Country', title: 'Country', width: '100px' },
+                {
+                    field: 'RangeId', title: 'Product Range', width: '150px',
+                    template: '#=Range.Name#',
+                    editor: function dropDownEditor(container, options) {
+                        $('<input name="' + options.field + '" class="dropDownTemplate"/>')
+                            .appendTo(container)
+                            .kendoDropDownList({
+                                autoBind: false,
+                                dataSource: {
+                                    transport: {
+                                        read: {
+                                            url: 'api/Stores/GetProductRanges',
+                                            dataType: 'json',
+                                            type: 'GET'
+                                        }
+                                    }
+                                },
+                                dataTextField: 'Name',
+                                dataValueField: 'Id',
+                                select: function (e) {
+                                    $(e.sender.element).closest("td").prepend("<span class='k-dirty'></span>");
+
+                                    var grid = $("#stores").data("kendoGrid");
+                                    var dataItem = grid.dataItem($(e.sender.element).closest("tr"));
+                                    dataItem.Range.Id = e.dataItem.Id;
+                                    dataItem.Range.Name = e.dataItem.Name
+                                }
+                            });
+                    }
+                },
+                {
+                    field: 'ForecastFactor', title: 'F.F', width: '70px', format: '{0:n1}', headerAttributes: { style: "text-align:center" },
+                    attributes: {
+                        style: "text-align:center"
+                    },
+                    editor: function forecastFactorNumeric(container, options) {
+                        $('<input name="' + options.field + '"/>')
+                            .appendTo(container)
+                            .kendoNumericTextBox();
+                    }
+                },
+                {
+                    field: 'Priority', title: 'Priority', width: '90px',
+                    attributes: {
+                        style: "text-align:center"
+                    },
+                    editor: function priorityNumeric(container, options) {
+                        $('<input name="' + options.field + '"/>')
+                            .appendTo(container)
+                            .kendoNumericTextBox();
+                    }
+                },
+                {
+                    field: 'IsActive', title: 'Active', width: '90px', headerAttributes: { style: "text-align:center" },
+                    attributes: {
+                        style: "text-align:center"
+                    },
+                    template:
+                        '<input id="checkbox#=Id#" type="checkbox" class="k-checkbox chkbx" #= IsActive ? \'checked="checked"\' : "" # />' +
+                        '<label class="k-checkbox-label" for="checkbox#=Id#"></label>'
+                }
+            ],
+            editable: true
+        });
+
+        // Set edit fields to 'dirty' AND update the row dataItem on change
+        $("#stores .k-grid-content").on("change", "input.chkbx", function (e) {
+            var grid = $("#stores").data("kendoGrid");
+            var dataItem = grid.dataItem($(e.target).closest("tr"));
+            $(e.target).closest("td").prepend("<span class='k-dirty'></span>");
+            dataItem.IsActive = this.checked;
+            dataItem.dirty = true;
+        });
+        $("#stores .k-grid-content").on("change", ".numeric", function (e) {
+            var grid = $("#stores").data("kendoGrid");
+            var dataItem = grid.dataItem($(e.target).closest("tr"));
+            $(e.target).closest("td").prepend("<span class='k-dirty'></span>");
+            dataItem[this.name] = this.value;
+            dataItem.dirty = true;
+        });
+
+
+        // SAVE CHANGES
+        $("#saveChanges").kendoButton({
+            click: function (e) {
+                var grid = $("#stores").data("kendoGrid");
+                grid.saveChanges();
+            }
+        }).kendoTooltip({
+            position: 'bottom',
+            content: 'Save Changes'
+        });
+
+        // REFRESH STORES (from Erply)
+        $("#refreshStores").kendoButton({
+            click: function (e) {
+
+                kendo.confirm("Are you sure you want to update the Stores list from Erply?")
+                    .then(function () {
+                        kendo.ui.progress($("body"), true)
+                        $.ajax({
+                            url: 'api/Stores/RefreshStoresFromErply',
+                            type: 'POST'
+                        }).done(function (data, status, xhr) {
+                            var grid = $("#stores").data("kendoGrid");
+                            grid.dataSource.read();
+                            grid.refresh();
+                            kendo.ui.progress($("body"), false)
+                            toaster.show("Stores have successfully been updated from Erply", "info");
+                        }).fail(function (xhr, status, error) {
+                            kendo.ui.progress($("body"), false)
+                            if (error != null) {
+                                toaster.show(error, "error");
+                            } else {
+                                toaster.show("Error: Unable to update Stores from Erply", "error");
+                            }
+                        });
+                    });
+
+            }
+        }).kendoTooltip({
+            position: 'bottom',
+            content: 'Refresh Stores List'
+        });
+
+        // EXPORT TO EXCEL
+        $("#excelExport").kendoButton({
+            click: function (e) {
+                var grid = $("#stores").data("kendoGrid");
+                grid.saveAsExcel();
+            }
+        }).kendoTooltip({
+            position: 'bottom',
+            content: 'Export to Excel'
+        });
+    });
+</script>

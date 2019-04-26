@@ -1,0 +1,174 @@
+﻿body {
+    font-size: 12px;
+    padding-top: 50px;
+    padding-bottom: 20px;
+    font-family: "Roboto",Arial,Helvetica,sans-serif;
+}
+
+.container{
+    padding:0;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+h1, h2, h3, h4, h5, h6,
+.k-grid-header .k-header {
+    color: #647786;
+}
+
+.navbar-inverse {
+    background-color: #647786;
+    border-color: #647786;
+}
+
+    .navbar-inverse .navbar-brand,
+    .navbar-inverse .navbar-nav > li > a {
+        color: #fff;
+    }
+        .navbar-inverse .navbar-brand:hover,
+        .navbar-inverse .navbar-nav > li > a:hover {
+            background-color: #DCEFE5;
+            border-color: #DCEFE5;
+            color: #647786;
+        }
+
+.navbar-fixed-top{
+    border:none;
+}
+
+.nav.navbar-nav img {
+    height: 40px;
+    margin-top: 9px;
+}
+
+.container {
+    width: 100%;
+}
+
+
+/* KENDO OVERRIDES */
+
+.k-widget,
+div.k-grid-footer,
+div.k-grid-header,
+.k-grid-header-wrap,
+.k-header.k-grid-toolbar,
+.k-filter-row th, .k-grid-header th.k-header,
+.k-grid tr td {
+    border: none;
+}
+
+.k-grid-header,
+.k-grid-header .k-header{
+    background-color:white;
+}
+
+.k-grid-header-wrap {
+    border-bottom: 1px solid #cedce6;
+    padding-bottom: 10px;
+}
+.k-pager-wrap {
+    border-top: 1px solid #cedce6;
+}
+
+.k-grid-toolbar {
+    padding: 10px 20px;
+}
+
+    .k-grid-toolbar .k-button,
+    .k-grid-toolbar .k-button:active {
+        background-color: white;
+        border-color: white;
+        padding: 5px;
+    }
+
+.k-grid td {
+    padding: 0.4em 1.2em;
+}
+
+.k-grid-toolbar .k-button,
+h3 {
+    margin-top: 10px;
+}
+
+.k-grid tr:hover {
+    background-color: #ffcc01;
+}
+
+.k-grid-header th.k-header {
+    padding: 2px;
+    font-size: 1.2em;
+}
+    .k-grid-header th.k-header > .k-link {
+        margin: 0 0 0 10px;
+    }
+
+.k-grid .k-grid-toolbar .k-icon {
+    color: black;
+    opacity: unset;
+    font-size: 20px;
+}
+
+.k-grid .k-grid-toolbar .k-i-plus{
+    font-size:26px;
+}
+
+.k-grid .k-icon {
+    opacity: unset;
+    margin: 0;
+}
+
+.k-icon.k-i-filter {
+    font-size: 12px;
+}
+
+.k-tooltip,
+.k-widget.k-tooltip {
+    color: #647786;
+    background-color: #ffcc01;
+}
+
+.k-checkbox:checked + .k-checkbox-label:before,
+.k-checkbox-label:active:before,
+.k-checkbox:focus + .k-checkbox-label:before,
+.k-checkbox:focus + .k-checkbox-label:hover:before {
+    color: #647786;
+    border-color: #647786;
+}
+
+.k-grid .k-numeric-wrap .k-link.k-state-selected, .k-numeric-wrap .k-link.k-state-selected {
+    background-color: white;
+}
+
+.k-switch,
+.km-switch-container,
+.km-switch-wrapper {
+    border-color: white;
+}
+
+.km-switch-wrapper,
+.k-switch-handle,
+.km-switch-container {
+    border-radius: 0;
+}
+
+.km-switch-label-off, 
+.km-switch-label-on{
+    text-transform:none;
+}
+
+.km-switch-label-on {
+    left: -165%;
+}
